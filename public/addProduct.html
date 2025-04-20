@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://orucevzyoczrdhnhrghn.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ydWNldnp5b2N6cmRobmhyZ2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMzQwNTAsImV4cCI6MjA2MDYxMDA1MH0.NvRIYWtK2aoTY_53C1G2DuV0NbQEgDW-SPydinvRdM0';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function addProduct() {
+            const product = {
+                name: 'Organic Carrots',
+                price: 1.49,
+                image_url: 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg',
+                description: 'Crunchy, sweet carrots grown without pesticides.',
+                category: 'vegetable'
+            };
+
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .insert([product])
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error('Error adding product:', error);
+                    document.getElementById('result').textContent = 'Error: ' + error.message;
+                } else {
+                    console.log('Product added successfully:', data);
+                    document.getElementById('result').textContent = 'Success! Product added with ID: ' + data.id;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Add Product to Database</h1>
+    <button onclick="addProduct()">Add Organic Carrots</button>
+    <div id="result"></div>
+</body>
+</html> 
